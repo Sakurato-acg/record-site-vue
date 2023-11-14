@@ -48,29 +48,31 @@ const article = ref({
   tags: [],
   viewCount: undefined
 })
+const commentQuery = computed(() => {
+  return commentStore.commentQuery
+})
 
 onMounted(async () => {
+  //加载文章信息
   article.value.id = router.currentRoute.value.params.id
   await articleDetailService(article.value.id)
     .then((data) => {
       article.value = data
+      commentStore.setCommentAId(article.value.id)
     })
     .catch((error) => {
       console.log(error)
-      // ElMessage.error(error)
       router.push('/error')
     })
   Prism.highlightAll() // 全局代码高亮
   tocbot.refresh({ ...tocbot.options, hasInnerContainers: true })
-  commentListService({
-    type: 0,
-    currentPage: 1,
-    pageSize: 10,
-    articleId: article.value.id
-  })
+  //加载评论信息
+  // alert(article.value.id)
+  commentListService({ ...commentQuery.value, articleId: article.value.id })
     .then((data) => {
-      commentStore.setCommentList(data)
-      commentStore.setCommentAId(article.value.id)
+      commentStore.setCommentList(data.list)
+      commentStore.setTotal(data.total)
+      commentStore.setSum(data.sum)
     })
     .catch((error) => {
       console.log(error)

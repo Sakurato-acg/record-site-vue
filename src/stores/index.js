@@ -116,15 +116,40 @@ export const useCommentStore = defineStore('comment', () => {
     list: [],
     articleId: undefined
   })
+  const commentQuery = ref({
+    type: 0,
+    currentPage: 1,
+    pageSize: 10,
+    total: undefined,
+    sum: undefined
+  })
   const setCommentList = (data) => {
     comment.value.list = data
   }
   const setCommentAId = (data) => {
     comment.value.articleId = data
   }
+  const setCurrentPage = (data) => {
+    commentQuery.value.currentPage = data
+  }
+  const setPageSize = (data) => {
+    commentQuery.value.pageSize = data
+  }
+  const setTotal = (data) => {
+    commentQuery.value.total = data
+  }
+  const setSum = (data) => {
+    commentQuery.value.sum = data
+  }
+
   return {
     comment,
+    commentQuery,
     setCommentAId,
-    setCommentList
+    setCommentList,
+    setCurrentPage,
+    setPageSize,
+    setTotal,
+    setSum
   }
 })

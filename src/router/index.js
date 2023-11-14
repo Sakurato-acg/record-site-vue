@@ -61,9 +61,9 @@ router.beforeEach((to, from, next) => {
   } else {
     //有token
     const layout = useLayoutStore()
-    if (layout.menu.hidden == false) {
-      layout.changeMenuHidden()
-    }
+    // if (layout.menu.hidden == false) {
+    //   layout.changeMenuHidden()
+    // }
     if (!asideMenu && to.fullPath.includes('/admin')) {
       //没有边栏路由并且访问的是后台
       const modules = import.meta.glob('../views/*/*.vue')

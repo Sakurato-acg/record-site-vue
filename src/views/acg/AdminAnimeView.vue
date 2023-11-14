@@ -16,7 +16,7 @@ const tableData = ref([])
 const getAnimeList = () => {
   animeListService(searchform.value)
     .then((data) => {
-      tableData.value = data.records
+      tableData.value = data.list
       searchform.value.total = data.total
     })
     .catch((err) => {
@@ -502,7 +502,6 @@ const locale = ref(zhCn)
               :initial-index="0"
               :preview-teleported="true"
               :hide-on-click-modal="true"
-              style="width: 10%"
             >
             </el-image>
           </el-form-item>

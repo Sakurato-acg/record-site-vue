@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { userRegisterService } from '../../api/auth/user.js'
+import { getQQAvatarService } from '../../api/tool'
 
 //父组件,显示
 const prop = defineProps({
@@ -73,14 +74,16 @@ const registerRules = ref({
   ]
 })
 
+const emit = defineEmits(['change'])
+const backToLogin = () => {
+  emit('change', !prop.isRegister)
+}
 const register = () => {
-  form.value.validate((valid) => {
+  form.value.validate(async (valid) => {
     if (valid) {
       //向后台发请求
-      console.log('注册请求')
-      userRegisterService(registerForm.value)
+      await userRegisterService(registerForm.value)
         .then((res) => {
-          console.log(res)
           ElMessage.success(res.msg)
           backToLogin()
         })
@@ -89,13 +92,8 @@ const register = () => {
         })
     } else {
       console.log('校验失败')
-      //就向用户提示错误信息
     }
   })
-}
-const emit = defineEmits(['change'])
-const backToLogin = () => {
-  emit('change', !prop.isRegister)
 }
 </script>
 <template>
@@ -121,7 +119,8 @@ const backToLogin = () => {
         </el-input>
       </el-form-item>
       <el-form-item prop="email" label="邮箱">
-        <el-input placeholder="请输入邮箱" v-model="registerForm.email" class="input"> </el-input>
+        <el-input placeholder="请输入邮箱 / 游客邮箱" v-model="registerForm.email" class="input">
+        </el-input>
       </el-form-item>
 
       <!-- //密码 -->

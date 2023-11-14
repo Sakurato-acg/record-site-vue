@@ -55,10 +55,10 @@ const loginRules = ref({
 })
 //登录login()
 const login = () => {
-  form.value.validate((valid) => {
-    if (valid) {
+  form.value.validate(async (valid) => {
+    if (valid) {       
       //向后台发请求
-      userLoginService(loginForm.value)
+      await userLoginService(loginForm.value)
         .then((data) => {
           store.setToken(data.token)
           router.push('/admin')

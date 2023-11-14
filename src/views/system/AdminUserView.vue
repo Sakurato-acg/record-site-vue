@@ -171,7 +171,7 @@ const onSubmit = () => {}
         <i class="el-icon-delete"></i>
         删除
       </el-button>
-      <!-- 筛选按钮
+     <!--  筛选按钮
       <el-popover placement="left-start" title="列筛选" trigger="click" style="float: right">
         <el-checkbox-group
           v-model="checkList"
@@ -281,9 +281,7 @@ const onSubmit = () => {}
 //   padding: 10px;
 // }
 .tableHeader {
-  //   background-color: #bbddeb;
   background-color: white;
   padding: 20px;
-  // border-bottom: 1px solid black;
 }
 </style>

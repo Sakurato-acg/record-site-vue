@@ -1,28 +1,27 @@
 <script setup>
-import { ref, toRefs } from 'vue'
-import { getLocationService } from '../../api/tool'
+import { computed, ref, toRefs } from 'vue'
+import { useCommentStore } from '../../stores';
 const props = defineProps({
   data: Object
 })
 const { data } = toRefs(props)
+
+//文章评论相关数据
+const commentStore = useCommentStore()
+const comment = computed(() => {
+  return commentStore.comment
+})
+
 const submitData = {
   parentId: data.value.parentId == -1 ? data.value.id : data.value.parentId,
   recoverId: data.value.id,
-  articleId: data.value.articleId
+  type:comment.value.articleId!==undefined?0:1
 }
 const layout = ref(false)
 const changeLayout = () => {
   layout.value = !layout.value
 }
 
-// const getLocation = (ip) => {
-//   getLocationService(ip)
-//     .then((data) => {
-//       console.log(data.data.adcode.n)
-//       return data.data.adcode.n
-//     })
-//     .catch((error) => {})
-// }
 </script>
 <template>
   <div class="comment-info">

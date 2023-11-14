@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useLayoutStore, useUserStore } from '../../stores/index'
 import { useRouter } from 'vue-router'
-import { userLogoutService } from '../../api/auth/user'
+import { userLogoutService, userInfoService } from '../../api/auth/user'
 
 //退出登录
 const logout = () => {
@@ -35,6 +35,13 @@ const title = computed(() => {
   return title.split('/')
 })
 
+//userInfo
+const userInfo = ref({
+  id: undefined,
+  avatar: undefined,
+  userName: undefined
+})
+
 //date
 const nowDate = ref('')
 
@@ -56,6 +63,11 @@ const currentTime = () => {
 }
 onMounted(() => {
   currentTime()
+  userInfoService()
+    .then((data) => {
+      userInfo.value = data
+    })
+    .catch((error) => {})
 })
 onBeforeUnmount(() => {
   if (formDate) {
@@ -106,10 +118,10 @@ onBeforeUnmount(() => {
       <el-avatar
         shape="square"
         :size="40"
-        src="https://avatars.githubusercontent.com/u/106546816?v=4"
+        :src="userInfo.avatar"
       />
       <div class="user">
-        <span class="name">你好,{{ '管理员小陈' }}</span>
+        <span class="name">你好, &nbsp;&nbsp;{{ userInfo.userName }}</span>
         <span class="time">{{ nowDate }}</span>
       </div>
       <el-dropdown>

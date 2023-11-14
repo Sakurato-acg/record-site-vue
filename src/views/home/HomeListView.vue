@@ -30,7 +30,7 @@ const getCategoryList = () => {
   categoryHomeListService()
     .then((data) => {
       categoryList.value = data.list
-      layoutStore.setSummaryCategory(data.count)
+      layoutStore.setSummaryCategory(data.total)
     })
     .catch((err) => {
       console.log(err)
@@ -42,7 +42,7 @@ const getTagList = () => {
   tagHomeListService()
     .then((data) => {
       tagList.value = data.list
-      layoutStore.setSummaryTag(data.count)
+      layoutStore.setSummaryTag(data.total)
     })
     .catch((err) => {
       console.log(err)

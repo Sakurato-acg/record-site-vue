@@ -1,9 +1,11 @@
 <script setup>
 import { ref, computed, onBeforeMount } from 'vue'
 import { useLayoutStore, useUserStore } from '../../stores/index'
+import { useRouter } from 'vue-router';
 
 const layoutStore = useLayoutStore()
 const userStore = useUserStore()
+const router = useRouter();
 
 // const menu = ref([
 //   {
@@ -89,6 +91,7 @@ const userStore = useUserStore()
 const menu = ref([])
 onBeforeMount(() => {
   menu.value = userStore.asideMenu
+  router.replace(router.getRoutes.path)
 })
 
 const noChildren = computed(() => {
