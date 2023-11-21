@@ -8,13 +8,12 @@ const isRegister = ref(false)
 const change = () => {
   isRegister.value = !isRegister.value
 }
-// const
 </script>
 <template>
   <blog-header></blog-header>
   <el-row class="loginView">
     <el-col :xs="22" :sm="12" :md="8">
-      <h2 style="padding: 30px 10px; color: #6c757d" v-if="!isRegister">登录</h2>
+      <h2 style="padding: 60px 10px 20px; color: #6c757d" v-if="!isRegister">登录</h2>
       <h2 style="padding: 30px 10px; color: #6c757d" v-else>注册</h2>
       <RegisterForm v-if="isRegister" :isRegister="isRegister" @change="change"> </RegisterForm>
       <LoginForm v-else :isRegister="isRegister" @change="change"></LoginForm>

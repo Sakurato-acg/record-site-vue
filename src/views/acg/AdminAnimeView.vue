@@ -638,7 +638,7 @@ const locale = ref(zhCn)
 
 .table-outer {
   .el-input {
-    --el-input-width: 218px;
+    --el-input-width: 208px;
   }
 }
 </style>

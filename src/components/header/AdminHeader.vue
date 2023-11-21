@@ -115,11 +115,7 @@ onBeforeUnmount(() => {
     <!--右边栏-->
     <div>
       <el-button @click="route.push('/')"> 返回前台 </el-button>
-      <el-avatar
-        shape="square"
-        :size="40"
-        :src="userInfo.avatar"
-      />
+      <el-avatar shape="square" :size="40" :src="userInfo.avatar" />
       <div class="user">
         <span class="name">你好, &nbsp;&nbsp;{{ userInfo.userName }}</span>
         <span class="time">{{ nowDate }}</span>
@@ -139,7 +135,7 @@ onBeforeUnmount(() => {
   </el-header>
 </template>
 
-<style lang="less">
+<style lang="less" scoped>
 .el-header {
   border-color: #e5e7eb;
   border-style: solid;
@@ -168,7 +164,7 @@ onBeforeUnmount(() => {
     align-items: center;
   }
   @media screen and (max-width: 766px) {
-    .el-breadcrumb {
+    > div:nth-of-type(2) {
       display: none;
     }
   }
@@ -196,6 +192,11 @@ onBeforeUnmount(() => {
         font-weight: 500;
         font-size: 0.875rem;
         line-height: 1.25rem;
+      }
+      @media screen and (max-width: 768px) {
+        .time {
+          // display: none;
+        }
       }
     }
     .el-dropdown {

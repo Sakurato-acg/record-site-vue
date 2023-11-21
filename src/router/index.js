@@ -42,6 +42,8 @@ const router = createRouter({
 })
 // 路由守卫核心代码
 router.beforeEach((to, from, next) => {
+
+
   const store = useUserStore()
   // 先判断浏览器中是否已经有token了，有则true，否则false
   const isLogin = store.token ? true : false
@@ -65,14 +67,12 @@ router.beforeEach((to, from, next) => {
     //   layout.changeMenuHidden()
     // }
     if (!asideMenu && to.fullPath.includes('/admin')) {
-      //没有边栏路由并且访问的是后台
+      //即使没有边栏路由并且访问的是后台
       const modules = import.meta.glob('../views/*/*.vue')
       userRouterService().then((data) => {
         store.setAsideMenu(data)
-        //边栏路由设置完毕
-        // console.log(data)
         let children = []
-        //获取动态路由
+
         const getRoute = function (arr) {
           arr.forEach((item) => {
             item.meta = {
@@ -87,21 +87,23 @@ router.beforeEach((to, from, next) => {
             }
           })
         }
+        //边栏路由设置完毕
+        // console.log(data)
+        //获取动态路由
 
         getRoute(data)
-
         children.forEach((item) => {
           router.addRoute('admin', item)
         })
 
         next({ ...to, replace: true })
-        // console.log(router.getRoutes())
       })
     } else {
       next()
     }
   }
 })
+
 router.afterEach((to, from, next) => {
   window.scrollTo(0, 0)
 })

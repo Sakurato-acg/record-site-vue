@@ -1,4 +1,5 @@
 import axios from 'axios'
+import qs from 'qs'
 import { useUserStore } from '../stores/index.js'
 import { ElMessage } from 'element-plus'
 import router from '../router/index.js'
@@ -10,6 +11,10 @@ const instance = axios.create({
   baseURL,
   timeout: 5000
 })
+
+instance.defaults.paramsSerializer = function (params) {
+  return qs.stringify(params, { arrayFormat: 'repeat' })
+}
 
 instance.interceptors.request.use(
   (config) => {
@@ -37,9 +42,9 @@ instance.interceptors.response.use(
       }
       return res.data.data
     }
-    // TODO 5. 处理401错误
-    // 错误的特殊情况 => 401 403权限不足 或 token 过期 => 拦截到登录
-    if (res.data.code === 401 || res.data.code === 403) {
+    // TODO 5. 处理40x / 50x 错误
+    // 错误的特殊情况 => 501需要登录 503权限不足 或 token 过期 => 拦截到登录
+    if (res.data.code === 501 || res.data.code === 503) {
       ElMessage.error(res.data.msg || '服务异常')
 
       const useStore = useUserStore()

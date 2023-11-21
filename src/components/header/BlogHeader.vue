@@ -55,7 +55,7 @@ const drawer = ref(false)
             <span>关于</span>
           </el-menu-item>
           <!--管理端-->
-          <el-menu-item index="admin" class="nav-item">
+          <el-menu-item index="/admin" class="nav-item">
             <el-icon><Setting /></el-icon>
             <span>管理端</span>
           </el-menu-item>

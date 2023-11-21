@@ -56,12 +56,22 @@ const loginRules = ref({
 //登录login()
 const login = () => {
   form.value.validate(async (valid) => {
-    if (valid) {       
+    if (valid) {
       //向后台发请求
       await userLoginService(loginForm.value)
         .then((data) => {
           store.setToken(data.token)
-          router.push('/admin')
+          ElMessageBox.confirm('前往哪里', '提示', {
+            type: 'success',
+            confirmButtonText: '管理后台',
+            cancelButtonText: '返回之前的地址'
+          })
+            .then(() => {
+              router.push('/admin')
+            })
+            .catch(() => {
+              router.back()
+            })
         })
         .catch((err) => {
           console.log(err)

@@ -20,6 +20,10 @@ export const userRouterService = () => {
 }
 
 //获取用户信息
-export const userInfoService = () => {
-  return request.get('/user')
+export const userInfoService = (id) => {
+  if (id == undefined) {
+    return request.get('/user/admin')
+  } else {
+    return request.get('/user/admin?id=' + id)
+  }
 }
