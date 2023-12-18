@@ -375,7 +375,7 @@ const locale = ref(zhCn)
         <el-table-column type="index" label="序号" align="center" :index="indexMethod">
         </el-table-column>
         <el-table-column prop="name" label="番名" align="center"> </el-table-column>
-        <el-table-column prop="picture" label="封面" align="center" width="120px">
+        <el-table-column prop="picture" label="封面" align="center" width="150px">
           <template #default="scope">
             <el-image
               :src="scope.row.picture"

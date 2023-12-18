@@ -396,6 +396,7 @@
 }
 .heti li {
   list-style-type: unset;
+  margin: 10px 0;
 }
 .heti table {
   box-sizing: border-box;

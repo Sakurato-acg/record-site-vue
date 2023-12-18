@@ -14,7 +14,8 @@ const date = computed(() => {
     <!--标题-->
     <div class="title">
       <!--链接-->
-      <router-link to="/think/漫画《旅程》.html">{{ data.title }}</router-link>
+      <!-- <router-link to="/think/漫画《旅程》.html">{{ data.title }}</router-link> -->
+      <p style="font-size: 1.28rem;line-height: 2.875rem;">{{ data.title }}</p>
     </div>
     <div class="info">
       <div class="user">

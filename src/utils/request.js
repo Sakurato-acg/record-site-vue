@@ -4,7 +4,7 @@ import { useUserStore } from '../stores/index.js'
 import { ElMessage } from 'element-plus'
 import router from '../router/index.js'
 
-// const baseURL = `${'http://j8180072h3.goho.co:37486'}`
+// const baseURL = `${'http://2858534773.gnway.cc:8000'}`
 const baseURL = 'http://localhost:81'
 
 const instance = axios.create({
@@ -34,7 +34,6 @@ instance.interceptors.request.use(
 // 响应拦截器
 instance.interceptors.response.use(
   (res) => {
-    // console.log(res)
     // TODO 4. 摘取核心响应数据
     if (res.data.code === 200) {
       if (res.data.msg !== undefined) {
@@ -61,8 +60,11 @@ instance.interceptors.response.use(
   (err) => {
     // alert(2)
     // 错误的默认情况 => 只要给提示
-    // ElMessage.error(err.response.data.message || '服务异常')
-    ElMessage.error('服务异常')
+    if (err.response != undefined) {
+      ElMessage.error(err.response.data.msg)
+    } else {
+      ElMessage.error('服务异常')
+    }
     return Promise.reject(err)
   }
 )

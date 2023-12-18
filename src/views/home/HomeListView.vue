@@ -200,7 +200,7 @@ const friends = ref([
   margin-top: 57.6px;
   width: 100%;
   height: 50vh;
-  background-image: url(../../assets/test/bg.webp);
+  background-image: url(../../assets/test/bg19e.png);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

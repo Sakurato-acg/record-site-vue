@@ -107,3 +107,7 @@ svg {
 .el-menu--horizontal.el-menu {
   border-bottom: none;
 }
+.el-table {
+  --el-table-border-color: rgba(6, 43, 121, 0.1);
+  --el-table-row-hover-bg-color: white !important ;
+}
