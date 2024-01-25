@@ -22,6 +22,6 @@
 </style>
 <style>
 ::-webkit-scrollbar {
-  display: none !important;
+  /* display: none !important; */
 }
 </style>

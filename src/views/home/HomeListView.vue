@@ -103,7 +103,7 @@ const friends = ref([
     <el-col :span="7" :offset="1" :xs="22" class="main-info">
       <el-card>
         <div>
-          <summary-aside></summary-aside>
+          <summary-aside style="border-bottom: 2px #eaecef solid"></summary-aside>
         </div>
         <div class="categories">
           <div class="title">
@@ -245,7 +245,7 @@ const friends = ref([
 
 .main-info {
   .el-card__body > div {
-    border-bottom: 2px #eaecef solid;
+    // border-bottom: 2px #eaecef solid;
   }
   .title {
     margin: 20px 0;
@@ -253,9 +253,13 @@ const friends = ref([
     justify-content: space-between;
     align-items: center;
     gap: 10px;
+
     .left {
       display: flex;
       align-items: center;
+      > span:last-of-type {
+        margin-left: 10px;
+      }
     }
     .right {
       display: flex;
@@ -283,7 +287,11 @@ const friends = ref([
       justify-content: space-between;
       .name:hover {
         color: #3eaf7c;
+        text-decoration: underline;
       }
+    }
+    .categories-item:hover {
+      box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.2);
     }
   }
   .tags,

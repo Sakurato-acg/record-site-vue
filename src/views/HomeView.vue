@@ -19,7 +19,8 @@
 
   // background-color: rgb(212, 229, 243);
   // background: url(../assets/test/background.jpg);
-  background: url(../assets/background.png);
+  // background: url(../assets/background.png);
+  background: url(../assets/background/background.png);
   // background: url(../assets/test/bg19e.png) no-repeat;
 }
 .el-main {

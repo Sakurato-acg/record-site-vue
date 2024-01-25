@@ -155,6 +155,7 @@ const hidden = computed(() => {
   z-index: 50;
   height: 100%;
   min-height: 100vh;
+  overflow: hidden;
 
   border-right-width: 1px;
   border-style: solid;

@@ -6,7 +6,8 @@ const props = defineProps(['data'])
 
 const date = computed(() => {
   let temp = new Date(props.data.createTime)
-  return temp.getFullYear() + '年' + temp.getMonth() + '月' + temp.getDate() + '日'
+  console.log(temp.getMonth())
+  return temp.getFullYear() + '年' + (temp.getMonth() + 1) + '月' + temp.getDate() + '日'
 })
 </script>
 <template>
@@ -15,7 +16,7 @@ const date = computed(() => {
     <div class="title">
       <!--链接-->
       <!-- <router-link to="/think/漫画《旅程》.html">{{ data.title }}</router-link> -->
-      <p style="font-size: 1.28rem;line-height: 2.875rem;">{{ data.title }}</p>
+      <el-link>{{ data.title }}</el-link>
     </div>
     <div class="info">
       <div class="user">
@@ -25,7 +26,7 @@ const date = computed(() => {
             d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"
           />
         </svg>
-        <span>{{ data.username }}</span>
+        <span>{{ data.author.userName }}</span>
       </div>
       <div class="time">
         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
@@ -76,17 +77,20 @@ const date = computed(() => {
   cursor: pointer;
   .title {
     a {
-      font-size: 20.48px;
+      // font-size: 20.48px;
       line-height: 46px;
+      font-size: 18px;
+      // line-height: 30px;
     }
   }
   .info {
     margin-top: 10px;
     color: #7f7f7f;
     fill: #7f7f7f;
+    font-size: 15px;
     svg {
       float: left;
-      padding-right: 10px;
+      padding-right: 5px;
     }
     span {
       float: left;
@@ -95,12 +99,12 @@ const date = computed(() => {
       float: left;
       display: flex;
       align-items: center;
-      margin-right: 10px;
+      margin-right: 15px;
     }
     .tag,
     .category {
       a {
-        padding: 0 5px;
+        padding: 0 5px 0 0;
         color: #7f7f7f;
       }
       a:hover {

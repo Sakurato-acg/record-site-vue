@@ -1,5 +1,5 @@
 <script setup>
-import { articleDetailService } from '../../api/blog/article'
+import { articleFrontDetailService } from '../../api/blog/article'
 import { commentListService } from '../../api/blog/comment'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -42,7 +42,7 @@ const article = ref({
   id: undefined,
   content: undefined,
   title: undefined,
-  username: undefined,
+  author: {},
   createTime: undefined,
   category: {},
   tags: [],
@@ -55,7 +55,7 @@ const commentQuery = computed(() => {
 onMounted(async () => {
   //加载文章信息
   article.value.id = router.currentRoute.value.params.id
-  await articleDetailService(article.value.id)
+  await articleFrontDetailService(article.value.id)
     .then((data) => {
       article.value = data
       commentStore.setCommentAId(article.value.id)
@@ -65,6 +65,7 @@ onMounted(async () => {
       router.push('/error')
     })
   Prism.highlightAll() // 全局代码高亮
+  // 全局代码高亮
   tocbot.refresh({ ...tocbot.options, hasInnerContainers: true })
   //加载评论信息
   // alert(article.value.id)
@@ -86,13 +87,7 @@ const date = computed(() => {
 <template>
   <div class="article">
     <el-row>
-      <el-col
-        :span="16"
-        :offset="1"
-        :xs="22"
-        style="margin-top: 100px; background: #fff"
-        class="box-shadow"
-      >
+      <el-col :span="17" :offset="1" :xs="22" style="margin-top: 100px">
         <div class="top">
           <h2 class="title">
             {{ article.title }}
@@ -105,7 +100,7 @@ const date = computed(() => {
                   d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"
                 />
               </svg>
-              <span>{{ article.username }}</span>
+              <span>{{ article.author.userName }}</span>
             </div>
             <div class="time">
               <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
@@ -161,7 +156,9 @@ const date = computed(() => {
           />
         </article>
       </el-col>
-      <div class="js-toc jc-toc-lg" style="overflow-y: visible"></div>
+      <el-col :span="8" :xs="0">
+        <div class="js-toc jc-toc-lg" style="overflow-y: visible; margin-top: 50px"></div>
+      </el-col>
       <!--右下角工具栏-->
       <div class="tools">
         <el-drawer :model-value="menu.visable" :append-to-body="true">
@@ -198,7 +195,7 @@ const date = computed(() => {
     align-items: center;
     justify-content: center;
     // background-color: antiquewhite;
-    padding: 20px 10px 20px;
+    padding: 20px 0px 20px;
     .title {
       margin-bottom: 20px;
     }
@@ -294,12 +291,12 @@ const date = computed(() => {
 </style>
 <style lang="less">
 .markdown-body {
-  .line-numbers {
-    overflow-y: hidden;
-    .line-numbers-rows {
-      font-size: 17px !important;
-    }
+  code[class*='language-'],
+  pre[class*='language-'] {
+    font-family: unset;
+    letter-spacing: 1px;
   }
+
   h1::before {
     content: 'H1';
   }

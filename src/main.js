@@ -8,7 +8,6 @@ import './style/utils.css'
 // import 'github-markdown-css/github-markdown.css' //布局
 import './style/heti.css'
 
-
 import { VueShowdownPlugin } from 'vue-showdown'
 
 import App from './App.vue'
@@ -27,7 +26,7 @@ app.use(VueShowdownPlugin, {
   flavor: 'github',
   // 设置 showdown 默认 options （会覆盖上面 flavor 的 options）
   options: {
-    emoji: false
+    emoji: true
   }
 })
 

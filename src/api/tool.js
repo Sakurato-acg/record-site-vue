@@ -13,3 +13,4 @@ export const getLocationService = (ip) => {
 export const getQQAvatarService = (email)=>{
   return axios.get(`https://q2.qlogo.cn/headimg_dl?dst_uin=${email}&spec=160`)
 }
+

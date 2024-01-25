@@ -392,7 +392,9 @@ const locale = ref(zhCn)
         <el-table-column prop="type" label="类型" align="center"> </el-table-column>
         <el-table-column prop="status" label="状态" align="center">
           <template #default="scope">
-            <el-tag type="success">{{ scope.row.status }}</el-tag>
+            <el-tag type="danger" v-if="scope.row.status == '待看'">{{ scope.row.status }}</el-tag>
+            <el-tag type="success" v-else-if="scope.row.status='看完'">{{ scope.row.status }}</el-tag>
+            <el-tag type="primary" v-else-if="scope.row.status='在看'">{{ scope.row.status }}</el-tag>
             <!-- <el-tag type="success" v-if="scope.row.status == 0">{{ '可用' }}</el-tag> -->
             <!-- <el-tag type="danger" v-else>{{ '禁用' }}</el-tag> -->
           </template>

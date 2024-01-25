@@ -23,6 +23,10 @@ const router = createRouter({
         {
           path: '/blog/article/:id',
           component: () => import('../views/blog/blogArticleView.vue')
+        },
+        {
+          path:'/acg/anime',
+          component: () => import('../views/acg/AcgAnimeView.vue')
         }
       ]
     },
@@ -87,7 +91,7 @@ router.beforeEach((to, from, next) => {
           })
         }
         //边栏路由设置完毕
-        // console.log(data)
+        console.log(data)
         //获取动态路由
 
         getRoute(data)

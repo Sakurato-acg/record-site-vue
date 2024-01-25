@@ -1,11 +1,17 @@
 import axios from 'axios'
 import qs from 'qs'
 import { useUserStore } from '../stores/index.js'
-import { ElMessage } from 'element-plus'
+import { ElLoading, ElMessage } from 'element-plus'
 import router from '../router/index.js'
 
+const loading = ElLoading.service({
+  lock: true,
+  text: 'Loading',
+  background: 'rgba(255, 255, 255,0.7)'
+})
+
 // const baseURL = `${'http://2858534773.gnway.cc:8000'}`
-const baseURL = 'http://localhost:81'
+const baseURL = 'http://localhost:82'
 
 const instance = axios.create({
   baseURL,
@@ -34,6 +40,7 @@ instance.interceptors.request.use(
 // 响应拦截器
 instance.interceptors.response.use(
   (res) => {
+    loading.close()
     // TODO 4. 摘取核心响应数据
     if (res.data.code === 200) {
       if (res.data.msg !== undefined) {
@@ -58,10 +65,11 @@ instance.interceptors.response.use(
     return Promise.reject(res.data)
   },
   (err) => {
+    loading.close()
     // alert(2)
     // 错误的默认情况 => 只要给提示
     if (err.response != undefined) {
-      ElMessage.error(err.response.data.msg)
+      ElMessage.error(err.response.data.msg || '服务异常')
     } else {
       ElMessage.error('服务异常')
     }

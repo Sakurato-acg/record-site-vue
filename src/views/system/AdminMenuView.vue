@@ -6,7 +6,7 @@ import {
   menuSelectService,
   menuUpdateService,
   menuAddService,
-  menuDeleteService,
+  menuDeleteService
 } from '../../api/system/menu'
 
 //中文
@@ -60,7 +60,7 @@ const tree = (data) => {
 //筛选相关
 const searchform = ref({
   currentPage: 1,
-  pageSize: 10,
+  pageSize: 30,
   total: 0,
   path: undefined,
   name: undefined,

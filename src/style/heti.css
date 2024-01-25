@@ -946,3 +946,7 @@
 .heti .heti-adjacent-quarter {
   margin-inline-end: -0.25em;
 }
+.heti a{
+  text-decoration: underline;
+}
+

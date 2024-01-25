@@ -14,6 +14,7 @@
   padding: 0;
   border: 0;
   font-family: 'HarmonyOS-Regular';
+  /* font-family: '__Noto_Sans_SC_fd5a25', '__Noto_Sans_SC_Fallback_fd5a25'; */
   /* overflow-x: hidden; */
   /* font-size: 20px!important; */
 }
@@ -110,4 +111,7 @@ svg {
 .el-table {
   --el-table-border-color: rgba(6, 43, 121, 0.1);
   --el-table-row-hover-bg-color: white !important ;
+}
+.el-input.el-input--suffix {
+  width: 90%;
 }

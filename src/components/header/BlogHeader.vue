@@ -32,13 +32,13 @@ const drawer = ref(false)
             <el-menu-item index="3-3">归档</el-menu-item>
           </el-sub-menu>
           <!--娱乐-->
-          <el-sub-menu index="4" class="nav-item">
+          <el-sub-menu index="/acg" class="nav-item">
             <template #title>
               <el-icon><Service /></el-icon>
-              <span>娱乐</span>
+              <span>acg</span>
             </template>
             <el-menu-item index="4-1">音乐</el-menu-item>
-            <el-menu-item index="4-2">番剧</el-menu-item>
+            <el-menu-item index="/acg/anime">番剧</el-menu-item>
           </el-sub-menu>
           <!--链接-->
           <el-sub-menu index="5" class="nav-item">

@@ -1,5 +1,15 @@
 <script setup>
 import router from '../../router'
+// import { test } from '../../api/test'
+// import { onMounted } from 'vue'
+
+// onMounted(() => {
+//   test()
+//     .then((res) => {
+//       console.log(res.data)
+//     })
+//     .catch()
+// })
 </script>
 <template>
   <el-row style="width: 100vw; height: 100vh">

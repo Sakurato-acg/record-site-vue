@@ -317,7 +317,7 @@ const update = () => {
         <!--个人地址-->
         <el-table-column prop="url" label="用户个人地址" align="center">
           <template #default="scope">
-            <el-link :href="scope.row.url" target="_blank">{{ scope.row.url }}</el-link>
+            <el-link type="success" :href="scope.row.url" target="_blank">{{ scope.row.url }}</el-link>
           </template>
         </el-table-column>
 
