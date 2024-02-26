@@ -1,6 +1,53 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { userInfoService, userLogoutService } from '../../api/auth/user'
+import { useUserStore } from '../../stores/index'
+
+const userStore = useUserStore()
+
+const router = useRouter()
+
 const drawer = ref(false)
+
+const userInfo = ref()
+
+onMounted(() => {
+  if (userStore.token != undefined && userStore.token != '') {
+    userInfoService()
+      .then((data) => {
+        userInfo.value = data
+        // userStore.setUserInfo(data)
+      })
+      .catch((error) => {})
+  }
+})
+
+/**
+ *
+ * @param {*} index 当前path
+ * @param {list} indexPath 父级和子级的path
+ */
+const selectMenu = (index, indexPath, item, routeResult) => {
+  router.push(index)
+  drawer.value = !drawer.value
+  // console.log(index, indexPath, item, routeResult)
+}
+const goback = () =>
+  setTimeout(() => {
+    router.go(0)
+  }, 1000)
+//退出登录
+const logout = () => {
+  userLogoutService()
+    .then((data) => {
+      userStore.removeToken()
+      userStore.removeAsideMenu()
+      goback()
+      clearTimeout(goback)
+    })
+    .catch((err) => {})
+}
 </script>
 <template>
   <el-header class="blogHeader">
@@ -15,21 +62,24 @@ const drawer = ref(false)
       >
         <summary-aside></summary-aside>
         <hr />
-        <el-menu text-color="#4f1e08" active-text-color="#3eaf7c" router>
+        <el-menu
+          text-color="#4f1e08"
+          active-text-color="#3eaf7c"
+          :router="false"
+          @select="selectMenu"
+        >
           <!--首页-->
           <el-menu-item index="/" class="nav-item">
             <el-icon><HomeFilled /></el-icon>
             <span>首页</span>
           </el-menu-item>
           <!--发现-->
-          <el-sub-menu index="3" class="nav-item">
+          <el-sub-menu index="#" class="nav-item">
             <template #title>
               <el-icon><Menu /></el-icon>
               <span>发现</span>
             </template>
-            <el-menu-item index="3-1">分类</el-menu-item>
-            <el-menu-item index="3-2">标签</el-menu-item>
-            <el-menu-item index="3-3">归档</el-menu-item>
+            <el-menu-item index="/blog/collation">归类</el-menu-item>
           </el-sub-menu>
           <!--娱乐-->
           <el-sub-menu index="/acg" class="nav-item">
@@ -37,7 +87,7 @@ const drawer = ref(false)
               <el-icon><Service /></el-icon>
               <span>acg</span>
             </template>
-            <el-menu-item index="4-1">音乐</el-menu-item>
+            <el-menu-item index="/4-1">音乐</el-menu-item>
             <el-menu-item index="/acg/anime">番剧</el-menu-item>
           </el-sub-menu>
           <!--链接-->
@@ -74,7 +124,7 @@ const drawer = ref(false)
           d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"
         />
       </svg>
-      <span>Record-Site</span>
+      <span @click="router.push('/')">Record-Site</span>
     </div>
     <el-menu
       mode="horizontal"
@@ -82,6 +132,8 @@ const drawer = ref(false)
       text-color="#4f1e08"
       active-text-color="#3eaf7c"
       router
+      :default-active="router.currentRoute.value.path"
+      style="align-items: center"
     >
       <!--搜索-->
       <el-menu-item index="1" class="nav-item">
@@ -94,14 +146,12 @@ const drawer = ref(false)
         <span>首页</span>
       </el-menu-item>
       <!--发现-->
-      <el-sub-menu index="3" class="nav-item">
+      <el-sub-menu index="#" class="nav-item">
         <template #title>
           <el-icon><Menu /></el-icon>
           <span>发现</span>
         </template>
-        <el-menu-item index="3-1">分类</el-menu-item>
-        <el-menu-item index="3-2">标签</el-menu-item>
-        <el-menu-item index="3-3">归档</el-menu-item>
+        <el-menu-item index="/blog/collation">归类</el-menu-item>
       </el-sub-menu>
       <!--娱乐-->
       <el-sub-menu index="4" class="nav-item">
@@ -110,7 +160,7 @@ const drawer = ref(false)
           <span>娱乐</span>
         </template>
         <el-menu-item index="4-1">音乐</el-menu-item>
-        <el-menu-item index="4-2">番剧</el-menu-item>
+        <el-menu-item index="/acg/anime">番剧</el-menu-item>
       </el-sub-menu>
       <!--链接-->
       <el-sub-menu index="5" class="nav-item">
@@ -132,9 +182,26 @@ const drawer = ref(false)
         <span>管理端</span>
       </el-menu-item>
       <!--用户-->
-      <el-menu-item index="/login" class="nav-item">
-        <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
-        <span>登录</span>
+      <!--已登录 -->
+      <el-menu-item class="nav-item" v-if="userInfo != undefined">
+        <el-dropdown>
+          <span class="flex-common">
+            <el-avatar :src="userInfo.avatar" />
+            <span>{{ userInfo.nickName }}</span>
+          </span>
+          <template #dropdown v-if="userInfo != undefined">
+            <el-dropdown-menu>
+              <el-dropdown-item @click="logout()">注销</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </el-menu-item>
+      <!--未登录-->
+      <el-menu-item v-else class="nav-item">
+        <span class="flex-common" @click="router.push('/login')">
+          <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+          <span>登录</span>
+        </span>
       </el-menu-item>
     </el-menu>
   </el-header>
@@ -170,6 +237,7 @@ const drawer = ref(false)
       font-weight: 600;
       // color: #242424;
       color: #242424;
+      cursor: pointer;
     }
   }
   //单框

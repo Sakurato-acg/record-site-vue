@@ -102,7 +102,7 @@ const goToRegister = () => {
   >
     <!-- //登录标题 -->
     <el-form-item class="header">
-      <img src="../../assets/img/logo.png" alt="" />
+      <img src="../../assets/logo.png" alt="" />
       <label class="label">博客管理系统</label>
     </el-form-item>
     <div class="form">

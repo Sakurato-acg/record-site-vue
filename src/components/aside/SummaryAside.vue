@@ -10,7 +10,7 @@ const data = computed(() => {
 <template>
   <div class="above" v-if="data != undefined">
     <div class="above-title">
-      <img src="https://avatars.githubusercontent.com/u/106546816?v=4" alt="" />
+      <img src="../../assets/logo.png" alt="" />
       <p>Record-Site</p>
     </div>
     <div class="summary">
@@ -64,7 +64,7 @@ const data = computed(() => {
     img {
       margin: 0 auto;
       width: 30%;
-      border-radius: 50%;
+      // border-radius: 50%;
       background-size: contain;
     }
     p {
@@ -76,10 +76,13 @@ const data = computed(() => {
   }
   .summary {
     display: flex;
-    gap: 30px;
+    flex-wrap: wrap;
+    // gap: 1em;
     justify-content: space-around;
     .summary-item {
       text-align: center;
+      margin: 5px;
+
       p:first-of-type {
         margin: 10px 0;
       }

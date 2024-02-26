@@ -25,8 +25,12 @@ const router = createRouter({
           component: () => import('../views/blog/blogArticleView.vue')
         },
         {
-          path:'/acg/anime',
+          path: '/acg/anime',
           component: () => import('../views/acg/AcgAnimeView.vue')
+        },
+        {
+          path: '/blog/collation',
+          component: () => import('../views/blog/blogArticleCollationView.vue')
         }
       ]
     },
@@ -68,40 +72,46 @@ router.beforeEach((to, from, next) => {
     // if (layout.menu.hidden == false) {
     //   layout.changeMenuHidden()
     // }
+    // store.removeAsideMenu()
+
     if (!asideMenu && to.fullPath.includes('/admin')) {
-    // if (to.fullPath.includes('/admin')) {
+      // if (to.fullPath.includes('/admin')) {
       //即使没有边栏路由并且访问的是后台
       const modules = import.meta.glob('../views/*/*.vue')
-      userRouterService().then((data) => {
-        store.setAsideMenu(data)
-        let children = []
+      userRouterService()
+        .then((data) => {
+          store.setAsideMenu(data)
+          let children = []
 
-        const getRoute = function (arr) {
-          arr.forEach((item) => {
-            item.meta = {
-              title: item.meta
-            }
-            if (item.menuType == 'C') {
-              // console.log(modules[`${item.component}`])
-              item.component = modules[`${item.component}`]
-              children.push(item)
-            } else if (item.menuType == 'M' && item.children != null) {
-              getRoute(item.children)
-            }
+          const getRoute = function (arr) {
+            arr.forEach((item) => {
+              item.meta = {
+                title: item.meta
+              }
+              if (item.menuType == 'C') {
+                // console.log(modules[`${item.component}`])
+                item.component = modules[`${item.component}`]
+                children.push(item)
+              } else if (item.menuType == 'M' && item.children != null) {
+                getRoute(item.children)
+              }
+            })
+          }
+          //边栏路由设置完毕
+          // console.log(data)
+          //获取动态路由
+
+          getRoute(data)
+          children.forEach((item) => {
+            router.addRoute('admin', item)
           })
-        }
-        //边栏路由设置完毕
-        console.log(data)
-        //获取动态路由
 
-        getRoute(data)
-        children.forEach((item) => {
-          router.addRoute('admin', item)
+          next({ ...to, replace: true })
+          return
         })
-
-        next({ ...to, replace: true })
-        return
-      })
+        .catch((error) => {
+          router.push('/login')
+        })
     } else {
       next()
     }

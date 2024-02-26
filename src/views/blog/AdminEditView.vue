@@ -12,12 +12,16 @@ import {
 import { categorySelectListService } from '../../api/blog/category'
 import { tagSelectListService } from '../../api/blog/tag'
 import { uploadMdService, uploadImageService } from '../../api/system/upload'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const router = useRouter()
 let goback = () =>
   setTimeout(() => {
     router.back()
   }, 2000)
+
+// 加载
+const loading = ref(false)
 
 const handleSubmit = () => {
   //提交表单
@@ -32,7 +36,7 @@ const beforeUpload = (file) => {
   // 判断是否大于2M
   const size = file.size / 1024 / 1024 < 200
   if (!size) {
-    ElMessage.erroe('最大200MB')
+    ElMessage.error('最大200MB')
     return false
   }
   if (file.type != 'application/zip') {
@@ -45,19 +49,22 @@ const beforeUpload = (file) => {
   }
   fileList.value.push(file)
 }
-const handleUpload = (params) => {
+const handleUpload = async (params) => {
   let file = new FormData()
   file.append('multipartFile', fileList.value[0])
+  loading.value = true
 
-  uploadMdService(file)
+  await uploadMdService(file)
     .then((data) => {
       fileList.value = []
-      article.value.content = data
+      article.value.content = data.content
+      article.value.fileList = data.fileList
     })
     .catch((error) => {
       console.log(error)
       fileList.value = []
     })
+  loading.value = false
 }
 
 //表单
@@ -70,7 +77,8 @@ const article = ref({
   tagIds: [],
   title: undefined,
   viewCount: 0,
-  categoryId: undefined
+  categoryId: undefined,
+  fileList: []
 })
 const categoryList = ref([])
 const tagList = ref([])
@@ -78,26 +86,32 @@ const tagList = ref([])
 //上传图片
 const onUploadImg = async (files, callback) => {
   // console.log(files)
+
   const res = await Promise.all(
     files.map((file) => {
       return new Promise((rev, rej) => {
         const form = new FormData()
-        form.append('multipartFile', file)
-        form.append('articleId', article.value.id)
-        uploadImageService(form)
+        uploadImageService('article', form)
           .then((data) => rev(data))
           .catch((error) => rej(error))
       })
     })
   )
 
-  callback(res.map((data) => data))
+  callback(
+    res.map((data) => {
+      data.fileList.map((file) => {
+        article.value.fileList.push(file)
+      })
+      return data.url
+    })
+  )
 }
 
 //查询文章
 onBeforeMount(() => {
   article.value.id = router.currentRoute.value.params.id
-  if (article.value.id != -1) {
+  if (article.value.id != -1 && article.value.id != undefined && article.value.id != '') {
     //文章详情
     articleAdminDetailService(article.value.id)
       .then((data) => {
@@ -160,7 +174,7 @@ const deleteArticle = () => {
   })
     .then(() => {
       if (article.value.id > 0) {
-        articleDeleteService(id)
+        articleDeleteService(article.value.id)
           .then((data) => {
             goback()
             clearTimeout(goback)
@@ -168,7 +182,7 @@ const deleteArticle = () => {
           .catch((err) => {
             log.error(err)
           })
-      } 
+      }
     })
     .catch(() => {
       ElMessage({
@@ -186,7 +200,7 @@ const deleteArticle = () => {
 </script>
 <template>
   <!-- 指定一个容器 -->
-  <div class="adminAtricleEditView">
+  <div class="adminAtricleEditView" v-loading="loading">
     <div class="tableHeader">
       <el-row>
         <el-col>

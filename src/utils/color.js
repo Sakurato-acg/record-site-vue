@@ -1,11 +1,16 @@
-export default randomColor=()=>{
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    do {
-        for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-    } while (color === '#FFFFFF' || color === '#000000');
-    return color;
+export const randomColor = () => {
+  const list = [
+    '#CCFF99',
+    '#99CCFF',
+    '99CCCC',
+    '#CCFFCC',
+    '#66CCCC',
+    '#CCCCFF',
+    '#FFFFCC',
+    '#CCFFFF',
+    '#66CCFF',
+    '#6699CC',
+    '#6699CC'
+  ]
+  return list[parseInt(Math.random() * list.length)]
 }
-

@@ -12,10 +12,10 @@ export const uploadMdService = (file) => {
   })
 }
 
-//上传文md件
-export const uploadImageService = (file) => {
+//上传图片
+export const uploadImageService = (way,file) => {
   return request({
-    url: '/media/upload/image',
+    url: `/media/upload/image/${way}`,
     method: 'post',
     data: file,
     headers: {

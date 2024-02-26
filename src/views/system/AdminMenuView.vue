@@ -338,14 +338,14 @@ const update = () => {
           <el-form-item>
             <el-button type="primary" plain @click="openAddForm()">
               <el-icon>
-                <component is="plus"></component>
+                <component is="plus" v-if="true"></component>
               </el-icon>
               添加
             </el-button>
 
             <el-button type="danger" plain @click="deleteMenu()">
               <el-icon>
-                <component is="delete"></component>
+                <component is="delete" v-if="true"></component>
               </el-icon>
               删除
             </el-button>
@@ -401,7 +401,7 @@ const update = () => {
         <el-table-column label="图标" prop="icon" align="center">
           <template #default="props">
             <el-icon>
-              <component :is="props.row.icon"></component>
+              <component :is="props.row.icon" v-if="props.row.icon"></component>
             </el-icon>
           </template>
         </el-table-column>
@@ -485,7 +485,7 @@ const update = () => {
             <el-form-item label="图标">
               <el-input v-model="updateForm.form.icon" placeholder="图标" />
               <el-icon size="24px" style="margin-left: 20px">
-                <component :is="updateForm.form.icon"></component>
+                <component :is="updateForm.form.icon" v-if="true"></component>
               </el-icon>
             </el-form-item>
             <!--名称-->
@@ -553,7 +553,7 @@ const update = () => {
             <el-form-item label="图标">
               <el-input v-model="addForm.form.icon" placeholder="图标" />
               <el-icon size="24px" style="margin-left: 20px">
-                <component :is="addForm.form.icon"></component>
+                <component :is="addForm.form.icon" v-if="true"></component>
               </el-icon>
             </el-form-item>
             <!--名称-->

@@ -44,6 +44,7 @@ const searchform = ref({
   pageSize: 10,
   total: 0,
   userName: undefined,
+  nickName: undefined,
   email: undefined,
   status: undefined,
   type: undefined,
@@ -55,6 +56,7 @@ const clearSearch = () => {
     pageSize: 10,
     total: 0,
     userName: undefined,
+    nickName: undefined,
     email: undefined,
     status: undefined,
     type: undefined,
@@ -143,6 +145,7 @@ const updateForm = ref({
     id: undefined,
     avatar: undefined,
     userName: undefined,
+    nickName: undefined,
     email: undefined,
     roleId: undefined,
     status: undefined,
@@ -165,6 +168,7 @@ const cancleUpdate = () => {
     id: undefined,
     avatar: undefined,
     userName: undefined,
+    nickName: undefined,
     email: undefined,
     roleName: undefined,
     status: undefined,
@@ -208,6 +212,10 @@ const update = () => {
           <!--用户名-->
           <el-form-item label="用户名">
             <el-input v-model="searchform.userName" placeholder="请输入用户名"></el-input>
+          </el-form-item>
+          <!--昵称-->
+          <el-form-item label="昵称">
+            <el-input v-model="searchform.nickName" placeholder="请输入昵称"></el-input>
           </el-form-item>
           <!--邮箱-->
           <el-form-item label="邮箱">
@@ -298,12 +306,18 @@ const update = () => {
         <!--用户名-->
         <el-table-column prop="userName" label="用户名" align="center" width="130px">
         </el-table-column>
+        <!--昵称-->
+        <el-table-column prop="nickName" label="昵称" align="center" width="130px">
+        </el-table-column>
         <!--邮箱-->
         <el-table-column prop="email" label="邮箱" align="center" width="170px"> </el-table-column>
         <!--用户角色-->
-        <el-table-column prop="roleName" label="用户角色" align="center" width="100px">
+        <el-table-column prop="role" label="用户角色" align="center" width="100px">
           <template #default="scope">
-            <el-tag v-if="scope.row.roleName != undefined">{{ scope.row.roleName }}</el-tag>
+            <el-tag v-if="scope.row.role.status == 0">{{ scope.row.role.roleName }}</el-tag>
+            <el-tag type="danger" v-else-if="scope.row.role.status == 1">{{
+              scope.row.role.roleName
+            }}</el-tag>
             <el-tag type="danger" v-else>未设置</el-tag>
           </template>
         </el-table-column>
@@ -317,7 +331,9 @@ const update = () => {
         <!--个人地址-->
         <el-table-column prop="url" label="用户个人地址" align="center">
           <template #default="scope">
-            <el-link type="success" :href="scope.row.url" target="_blank">{{ scope.row.url }}</el-link>
+            <el-link type="success" :href="scope.row.url" target="_blank">{{
+              scope.row.url
+            }}</el-link>
           </template>
         </el-table-column>
 
@@ -362,6 +378,10 @@ const update = () => {
             <!--用户名-->
             <el-form-item label="用户名">
               <el-input v-model="updateForm.form.userName" placeholder="用户名"></el-input>
+            </el-form-item>
+            <!--昵称-->
+            <el-form-item label="昵称">
+              <el-input v-model="updateForm.form.nickName" placeholder="用户名"></el-input>
             </el-form-item>
             <!--邮箱-->
             <el-form-item label="邮箱">

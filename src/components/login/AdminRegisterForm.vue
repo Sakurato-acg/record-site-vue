@@ -11,18 +11,20 @@ const prop = defineProps({
 const form = ref()
 const registerForm = ref({
   userName: '',
+  nickName: '',
   password: '',
   repassword: '',
   email: '',
-  avatar: ''
+  avatar: '',
+  url: ''
 })
 const registerRules = ref({
   userName: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { required: true, message: '请输入账号', trigger: 'blur' },
     {
       min: 2,
       max: 20,
-      message: '用户名必须是 2-20位 的字符',
+      message: '账号必须是 2-20位 的字符',
       trigger: 'blur'
     }
   ],
@@ -84,7 +86,6 @@ const register = () => {
       //向后台发请求
       await userRegisterService(registerForm.value)
         .then((res) => {
-          ElMessage.success(res.msg)
           backToLogin()
         })
         .catch((err) => {
@@ -104,23 +105,30 @@ const register = () => {
     aria-autocomplete="false"
     :rules="registerRules"
     label-width="auto"
-    label-position="left"
+    label-position="right"
   >
     <!-- //登录标题 -->
     <el-form-item class="header">
-      <img src="../../assets/img/logo.png" alt="" />
+      <img src="../../assets/logo.png" alt="" />
       <label class="label">博客管理系统</label>
     </el-form-item>
     <div class="form">
       <!--上传头像-->
-      <!-- //账号或邮箱 -->
-      <el-form-item prop="userName" label="用户名">
-        <el-input placeholder="请输入用户名" v-model="registerForm.userName" class="input">
+      <!--账号或邮箱 -->
+      <el-form-item prop="userName" label="账号">
+        <el-input placeholder="请输入账号" v-model="registerForm.userName" class="input">
+        </el-input>
+      </el-form-item>
+      <el-form-item prop="nickName" label="昵称">
+        <el-input
+          placeholder="请输入昵称，默认同用户名"
+          v-model="registerForm.nickName"
+          class="input"
+        >
         </el-input>
       </el-form-item>
       <el-form-item prop="email" label="邮箱">
-        <el-input placeholder="请输入邮箱 / 游客邮箱" v-model="registerForm.email" class="input">
-        </el-input>
+        <el-input placeholder="请输入邮箱" v-model="registerForm.email" class="input"> </el-input>
       </el-form-item>
 
       <!-- //密码 -->
@@ -141,6 +149,16 @@ const register = () => {
           name="password"
           type="password"
           placeholder="请再次输入"
+          class="input"
+        >
+        </el-input>
+      </el-form-item>
+      <!--个人链接-->
+      <el-form-item prop="url" label="个人链接">
+        <el-input
+          v-model="registerForm.url"
+          name="url"
+          placeholder="请输入您的个人地址"
           class="input"
         >
         </el-input>

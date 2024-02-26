@@ -314,10 +314,10 @@ const openEdit = (row) => {
           </template>
         </el-table-column>
         <!--作者-->
-        <el-table-column prop="author.userName" label="作者" align="center">
+        <el-table-column prop="author.nickName" label="作者" align="center">
           <template #default="scope">
-            <el-text v-if="scope.row.author.status == 0">{{ scope.row.author.userName }}</el-text>
-            <el-text v-else type="danger">{{ scope.row.author.userName }}</el-text>
+            <el-text v-if="scope.row.author.status == 0">{{ scope.row.author.nickName }}</el-text>
+            <el-text v-else type="danger">{{ scope.row.author.nickName }}</el-text>
           </template>
         </el-table-column>
         <!--状态-->
@@ -336,8 +336,8 @@ const openEdit = (row) => {
         </el-table-column>
         <!--浏览量-->
         <el-table-column prop="viewCount" label="浏览量" align="center"></el-table-column>
-        <!--创建时间-->
-        <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
+        <!--更新时间-->
+        <el-table-column prop="updateTime" label="更新时间" align="center"></el-table-column>
         <!--分类-->
         <el-table-column prop="category" label="分类" align="center" width="150px">
           <template #default="scope">

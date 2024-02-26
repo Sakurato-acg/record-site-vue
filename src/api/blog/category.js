@@ -8,11 +8,11 @@ import request from '../../utils/request'
  *  id  name count
  * }
  */
-export const categoryHomeListService = () => {
+export const categoryHomeListService = (pageSize) => {
   return request.get('/blogCategory/front', {
     params: {
-      //只显示10个分类
-      pageSize: 10
+      //只显示20个分类
+      pageSize: pageSize
     }
   })
 }

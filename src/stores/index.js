@@ -86,13 +86,29 @@ export const useUserStore = defineStore(
       asideMenu.value = ''
     }
 
+    // 用户信息
+    const userInfo = ref({})
+    const setUserInfo = (data) => {
+      userInfo.value = data
+    }
+    const removeUserInfo = (data) => {
+      userInfo.value = {}
+    }
+    const checkUserInfo = () => {
+      return Object.keys(userInfo.value).length>0
+    }
+
     return {
       token,
       setToken,
       removeToken,
       asideMenu,
       setAsideMenu,
-      removeAsideMenu
+      removeAsideMenu,
+      userInfo,
+      setUserInfo,
+      removeUserInfo,
+      checkUserInfo
     }
   },
   {
@@ -120,7 +136,7 @@ export const useCommentStore = defineStore('comment', () => {
     type: 0,
     currentPage: 1,
     pageSize: 10,
-    total: undefined,
+    total: 0,
     sum: undefined
   })
   const setCommentList = (data) => {

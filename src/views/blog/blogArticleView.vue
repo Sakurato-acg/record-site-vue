@@ -1,31 +1,13 @@
 <script setup>
-import { articleFrontDetailService } from '../../api/blog/article'
+import { articleFrontDetailService, articleViewCountUpdatedService } from '../../api/blog/article'
 import { commentListService } from '../../api/blog/comment'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Prism from 'prismjs' //导入代码高亮插件的core（里面提供了其他官方插件及代码高亮样式主题，你只需要引入即可）
-import 'prismjs/themes/prism-okaidia.min.css' //引入代码高亮主题
-import 'prismjs/plugins/line-numbers/prism-line-numbers.min.js' //行号插件
-import 'prismjs/plugins/line-numbers/prism-line-numbers.min.css' //行号插件的样式
-import * as tocbot from 'tocbot'
 import { useCommentStore } from '../../stores/index'
 
 const router = useRouter()
 const commentStore = useCommentStore()
-//目录
-tocbot.init({
-  // Where to render the table of contents.
-  tocSelector: '.js-toc',
-  // Where to grab the headings to build the table of contents.
-  contentSelector: '.js-toc-content',
-  // Which headings to grab inside of the contentSelector element.
-  headingSelector: 'h1, h2, h3,h4,h5',
-  // For headings inside relative or absolute positioned containers within content.
-  hasInnerContainers: true,
-  headingsOffset: 64,
-  scrollSmoothOffset: -64,
-  collapseDepth: 3
-})
 
 //tools
 const menu = ref({
@@ -34,9 +16,60 @@ const menu = ref({
 })
 const changeMenu = () => {
   menu.value.visable = !menu.value.visable
-
-  menu.value.content = window.document.querySelector('.js-toc').innerHTML
 }
+const showdown = ref()
+const titles = ref([])
+const createTocbot = () => {
+  let nodes = document.querySelector('article').querySelectorAll('h1,h2,h3,h4,h5,h6')
+  // let tempIndex = {
+  //   H1: 1,
+  //   H2: 1,
+  //   H3: 1,
+  //   h3: 1,
+  //   H4: 1,
+  //   H5: 1
+  // }
+  // let tempNode = null
+  for (let i = 0; i < nodes.length; i++) {
+    let node = nodes[i]
+    let regex = /^H[1-6]{1}$/
+    if (regex.exec(node.tagName)) {
+      node.id = node.id
+    }
+    let toc = {
+      id: node.id,
+      title: node.innerText,
+      level: parseInt(node.tagName.substring(1))
+    }
+    // if (tempNode != null && tempNode.level != toc.level) {
+    //   // tempIndex[]
+    // }
+    // toc.prefix = `${toc.level}-${tempIndex[node.tagName]++}`
+    // tempNode = toc
+    titles.value.push(toc)
+  }
+}
+const handleNodeClick = (node_id) => {
+  let node = document.getElementById(node_id)
+  // node.scrollIntoView({
+  //   alignToTop: '107.6px',
+  //   behavior: 'smooth',
+  //   block: 'start'
+  // })
+  window.scrollTo({
+    top: node.offsetTop - 40,
+    left: 0,
+    behavior: 'smooth'
+  })
+  if (menu.value.visable == true) {
+    menu.value.visable = false
+  }
+}
+const menu_item = ref()
+watch(menu_item, (oldView, newView) => {
+  console.log(2)
+})
+
 //文章id
 const article = ref({
   id: undefined,
@@ -53,8 +86,13 @@ const commentQuery = computed(() => {
 })
 
 onMounted(async () => {
-  //加载文章信息
   article.value.id = router.currentRoute.value.params.id
+
+  //更新文章浏览量
+  await articleViewCountUpdatedService(article.value.id)
+    .then((data) => {})
+    .catch((error) => {})
+  //加载文章信息
   await articleFrontDetailService(article.value.id)
     .then((data) => {
       article.value = data
@@ -64,11 +102,13 @@ onMounted(async () => {
       console.log(error)
       router.push('/error')
     })
-  Prism.highlightAll() // 全局代码高亮
   // 全局代码高亮
-  tocbot.refresh({ ...tocbot.options, hasInnerContainers: true })
+
+  Prism.highlightAll()
+  // tocbot.refresh({ ...tocbot.options, hasInnerContainers: true })
+  // 目录
+  createTocbot()
   //加载评论信息
-  // alert(article.value.id)
   commentListService({ ...commentQuery.value, articleId: article.value.id })
     .then((data) => {
       commentStore.setCommentList(data.list)
@@ -81,13 +121,14 @@ onMounted(async () => {
 })
 const date = computed(() => {
   let temp = new Date(article.value.createTime)
-  return temp.getFullYear() + '年' + temp.getMonth() + '月' + temp.getDate() + '日'
+  return temp.getFullYear() + '年' + (temp.getMonth() + 1) + '月' + temp.getDate() + '日'
 })
 </script>
+<!-- :class="active == index ? 'structure active' : 'structure'" -->
 <template>
-  <div class="article">
+  <div class="article front-top">
     <el-row>
-      <el-col :span="17" :offset="1" :xs="22" style="margin-top: 100px">
+      <el-col :span="16" :offset="1" :xs="22" class="box-border">
         <div class="top">
           <h2 class="title">
             {{ article.title }}
@@ -100,7 +141,7 @@ const date = computed(() => {
                   d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"
                 />
               </svg>
-              <span>{{ article.author.userName }}</span>
+              <span>{{ article.author.nickName }}</span>
             </div>
             <div class="time">
               <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
@@ -145,28 +186,41 @@ const date = computed(() => {
               </span>
             </div>
           </div>
-          <hr />
         </div>
-        <article class="markdown-body line-numbers heti">
-          <VueShowdown
-            :markdown="article.content"
-            flavor="github"
-            :options="{ emoji: true }"
-            class="js-toc-content"
-          />
+        <hr />
+        <article class="markdown-body heti line-numbers">
+          <VueShowdown :markdown="article.content" ref="showdown" class="js-toc-content" />
         </article>
       </el-col>
-      <el-col :span="8" :xs="0">
-        <div class="js-toc jc-toc-lg" style="overflow-y: visible; margin-top: 50px"></div>
-      </el-col>
+      <div class="box-border tocbot">
+        <h3>目录</h3>
+        <div>
+          <a
+            :style="{ paddingLeft: (item.level - 1) * 1.5 + 'em' }"
+            style="display: block; cursor: pointer; margin: 5px 0"
+            v-for="(item, index) in titles"
+            :key="index"
+            @click="handleNodeClick(item.id)"
+          >
+            <div>
+              <!-- <el-icon v-if="item.level == 2"><ArrowRight /></el-icon> -->
+              <span> &nbsp;{{ item.title }} </span>
+            </div>
+          </a>
+        </div>
+      </div>
       <!--右下角工具栏-->
       <div class="tools">
         <el-drawer :model-value="menu.visable" :append-to-body="true">
-          <div
-            class="js-toc"
-            style="overflow-y: visible; position: unset"
-            v-html="menu.content"
-          ></div>
+          <a
+            :style="{ paddingLeft: (item.level - 1) * 1.5 + 'em' }"
+            style="display: block; cursor: pointer; margin: 5px 0"
+            v-for="(item, index) in titles"
+            :key="index"
+            @click="handleNodeClick(item.id)"
+          >
+            {{ item.title }}
+          </a>
         </el-drawer>
         <button class="menu" @click="changeMenu()">
           <svg
@@ -189,26 +243,26 @@ const date = computed(() => {
 </template>
 <style lang="less" scoped>
 .article {
+  // margin-top: 100px;
   .top {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    // background-color: antiquewhite;
-    padding: 20px 0px 20px;
+    padding: 20px 10px 20px;
+
     .title {
-      margin-bottom: 20px;
+      margin: 25px auto;
     }
     .info {
       display: flex;
-      // justify-content: center;
+      justify-content: center;
       flex-wrap: wrap;
-      // background-color: aquamarine;
       > div {
         display: flex;
         align-items: center;
-        margin-right: 20px;
-        float: left;
+        margin: 5px;
+        // float: left;
         > svg {
           margin-right: 10px;
           fill: #7f7f7f;
@@ -231,7 +285,7 @@ const date = computed(() => {
     position: fixed;
     right: 10px;
     bottom: 2vh;
-    z-index: 1;
+    z-index: 2;
     button {
       width: 3em;
       height: 3em;
@@ -259,34 +313,35 @@ const date = computed(() => {
   }
 }
 .markdown-body {
+  // background-color: rgb(234, 250, 215);
+  background-color: #fff;
+
   // border: 1px black solid;
-  padding: 0 20px 20px;
+  padding: 0 35px 20px;
 }
-.js-toc-lg {
+.tocbot {
+  width: 16.7%;
+  max-height: 60vh;
+  overflow-y: auto;
   position: fixed;
-  right: 5vw;
-  top: 15vh;
-  height: 20px;
-  font-size: 18px;
-}
-.js-toc {
-  position: fixed;
-  right: 5vw;
-  top: 15vh;
-  height: 20px;
-  font-size: 18px;
-  .toc-list {
-    background-color: #ecfafa;
-    border: 1px black solid;
-  }
+  right: 10vw;
+  z-index: 1;
+  padding: 10px;
 }
 @media screen and (max-width: 768px) {
-  .jc-toc-lg {
+  .tocbot {
     display: none;
-    // top: unset;
-    // right: 10px;
-    // bottom: 2vh;
   }
+}
+// @media screen and (max-width: 1350px) {
+//   .tocbot {
+//     right: vw;
+//   }
+// }
+hr {
+  margin: 0 auto;
+  width: 90%;
+  border: 1px solid #e3eaef;
 }
 </style>
 <style lang="less">
@@ -296,7 +351,6 @@ const date = computed(() => {
     font-family: unset;
     letter-spacing: 1px;
   }
-
   h1::before {
     content: 'H1';
   }
@@ -313,9 +367,12 @@ const date = computed(() => {
   h2::before,
   h3::before,
   h4::before {
+    left: -30px;
+    top: 10%;
+    position: absolute;
     color: #b0b0b0;
     font-size: medium;
-    padding-right: 5px;
+    // padding-right: 5px;
   }
 }
 .article .tools {

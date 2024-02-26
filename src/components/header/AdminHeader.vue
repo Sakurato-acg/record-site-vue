@@ -4,13 +4,14 @@ import { useLayoutStore, useUserStore } from '../../stores/index'
 import { useRouter } from 'vue-router'
 import { userLogoutService, userInfoService } from '../../api/auth/user'
 
+const userStore = useUserStore()
+
 //退出登录
 const logout = () => {
   userLogoutService()
     .then((data) => {
-      const useStore = useUserStore()
-      useStore.removeToken()
-      useStore.removeAsideMenu()
+      userStore.removeToken()
+      userStore.removeAsideMenu()
 
       route.push('/login')
     })
@@ -39,7 +40,8 @@ const title = computed(() => {
 const userInfo = ref({
   id: undefined,
   avatar: undefined,
-  userName: undefined
+  userName: undefined,
+  nickName: undefined
 })
 
 //date
@@ -63,11 +65,16 @@ const currentTime = () => {
 }
 onMounted(() => {
   currentTime()
+  // if (userStore.checkUserInfo()) {
+  //   userInfo.value = userStore.userInfo
+  // } else {
   userInfoService()
     .then((data) => {
       userInfo.value = data
+      // userStore.setUserInfo(data)
     })
     .catch((error) => {})
+  // }
 })
 onBeforeUnmount(() => {
   if (formDate) {
@@ -117,7 +124,7 @@ onBeforeUnmount(() => {
       <el-button @click="route.push('/')"> 返回前台 </el-button>
       <el-avatar shape="square" :size="40" :src="userInfo.avatar" />
       <div class="user">
-        <span class="name">你好, &nbsp;&nbsp;{{ userInfo.userName }}</span>
+        <span class="name">你好, &nbsp;&nbsp;{{ userInfo.nickName }}</span>
         <span class="time">{{ nowDate }}</span>
       </div>
       <el-dropdown>

@@ -1,92 +1,11 @@
 <script setup>
 import { ref, computed, onBeforeMount } from 'vue'
 import { useLayoutStore, useUserStore } from '../../stores/index'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 
 const layoutStore = useLayoutStore()
 const userStore = useUserStore()
-const router = useRouter();
-
-// const menu = ref([
-//   {
-//     id: '2023',
-//     label: '展示',
-//     orderNum: 0,
-//     path: '/discard',
-//     icon: 'monitor',
-
-//     parentId: '0',
-//     perms: 'content:article:writer',
-//     status: '0'
-//   },
-//   {
-//     children: [
-//       {
-//         id: '100',
-//         icon: 'setting',
-//         label: '用户管理',
-//         path: '/system/user',
-//         orderNum: 1,
-//         perms: 'system:user:list',
-//         status: '0'
-//       },
-//       {
-//         id: '101',
-//         icon: 'setting',
-//         label: '角色管理',
-//         path: '/system/role',
-//         orderNum: 2,
-//         perms: 'system:role:list',
-//         status: '0'
-//       },
-//       {
-//         id: '102',
-//         icon: 'setting',
-//         label: '菜单管理',
-//         path: '/system/menu',
-//         orderNum: 3,
-//         perms: 'system:menu:list',
-//         status: '0'
-//       }
-//     ],
-//     id: '1',
-//     icon: 'location',
-//     label: '系统管理',
-//     path: '/system',
-//     orderNum: 1,
-//     perms: '',
-//     status: '0'
-//   },
-//   {
-//     children: [
-//       {
-//         id: '2019',
-//         icon: 'setting',
-//         label: '文章管理',
-//         path: '/blog/article',
-//         orderNum: 0,
-//         perms: 'content:article:list',
-//         status: '0'
-//       },
-//       {
-//         id: '2019',
-//         icon: 'edit',
-//         label: '写博客',
-//         path: '/blog/edit',
-//         orderNum: 0,
-//         perms: 'content:article:edit',
-//         status: '0'
-//       }
-//     ],
-//     id: '2017',
-//     icon: 'setting',
-//     label: '博客管理',
-//     orderNum: 4,
-//     path: '/blog',
-//     perms: '',
-//     status: '0'
-//   }
-// ])
+const router = useRouter()
 
 const menu = ref([])
 onBeforeMount(() => {
@@ -110,7 +29,7 @@ const hidden = computed(() => {
     <div class="aside-header">
       <div class="box cursor-pointer">
         <div>
-          <img src="../../assets/img/logo.webp" alt="" />
+          <img src="../../assets/logo.png" alt="" />
         </div>
 
         <div :class="{ hiddenTitle: hidden }">
@@ -125,6 +44,7 @@ const hidden = computed(() => {
       background-color="#fff"
       active-text-color="blue"
       router
+      :unique-opened="true"
     >
       <el-menu-item :index="item.path" v-for="item in noChildren" :key="item.name">
         <el-icon>

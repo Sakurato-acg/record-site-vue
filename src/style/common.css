@@ -115,3 +115,26 @@ svg {
 .el-input.el-input--suffix {
   width: 90%;
 }
+.front-top {
+  margin-top: 107.6px;
+}
+.el-pagination button {
+  /* font-size: 17px; */
+  color: #999999 !important;
+  background-color: transparent;
+}
+.el-pager li {
+  /* font-size: 17px; */
+  background-color: transparent;
+  /* margin: 0 4px; */
+}
+.el-pagination button:disabled {
+  /* font-size: 17px; */
+  background-color: transparent;
+}
+.el-pager li.is-active {
+  color: #fff;
+  background-image: linear-gradient(to right, #ed6ea0 0, #ec8c69 100%);
+  border-radius: 5px;
+  box-shadow: 0 0 12px rgba(237, 110, 160, 0.3);
+}

@@ -460,9 +460,9 @@
 .heti code {
   margin-inline-start: 0.25em;
   margin-inline-end: 0.25em;
-  font-family: 'SFMono-Regular', consolas, 'Liberation Mono', menlo, courier, monospace,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  font-size: 0.875em;
+  /* font-family: 'SFMono-Regular', consolas, 'Liberation Mono', menlo, courier, monospace,'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; */
+  font-size: 1.3em;
+  background-color: #ebffeb;
 }
 .heti dfn {
   font-weight: 600;
@@ -946,7 +946,6 @@
 .heti .heti-adjacent-quarter {
   margin-inline-end: -0.25em;
 }
-.heti a{
+.heti a {
   text-decoration: underline;
 }
-

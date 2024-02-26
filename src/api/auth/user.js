@@ -22,8 +22,13 @@ export const userRouterService = () => {
 //获取用户信息
 export const userInfoService = (id) => {
   if (id == undefined) {
-    return request.get('/user/admin')
+    return request.get('/user/header')
   } else {
     return request.get('/user/admin?id=' + id)
   }
+}
+
+//更新用户
+export const userUpdateService = (form) => {
+  return request.put('/user/edit',form)
 }

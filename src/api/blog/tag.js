@@ -1,11 +1,12 @@
 import request from '../../utils/request'
 
 //获取首页标签列表
-export const tagHomeListService = () => {
+export const tagHomeListService = (pageSize,categoryName) => {
   return request.get('/blogTag/front', {
     params: {
-      //只显示10个分类
-      pageSize: 10
+      //只显示20个分类
+      pageSize,
+      categoryName:categoryName!=undefined ? categoryName:undefined 
     }
   })
 }

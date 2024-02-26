@@ -114,6 +114,9 @@ const innerDialog = ref({
 })
 const changeInnerVisible = () => {
   innerDialog.value.visable = !innerDialog.value.visable
+  if (updateForm.value.form.url != undefined) {
+    innerDialog.value.url = updateForm.value.form.url
+  }
 }
 
 //修改数据
@@ -268,11 +271,21 @@ const handleSizeChange = (val) => {
   console.log(`每页 ${val} 条`)
   searchform.value.pageSize = val
   getAnimeList()
+  backTop()
 }
 const handleCurrentChange = (val) => {
-  console.log(`当前页: ${val}`)
+  // console.log(`当前页: ${val}`)
   searchform.value.currentPage = val
   getAnimeList()
+  backTop()
+}
+const backTop = () => {
+  let node = document.querySelector('.el-main')
+  node.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  })
 }
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 const locale = ref(zhCn)
@@ -393,8 +406,12 @@ const locale = ref(zhCn)
         <el-table-column prop="status" label="状态" align="center">
           <template #default="scope">
             <el-tag type="danger" v-if="scope.row.status == '待看'">{{ scope.row.status }}</el-tag>
-            <el-tag type="success" v-else-if="scope.row.status='看完'">{{ scope.row.status }}</el-tag>
-            <el-tag type="primary" v-else-if="scope.row.status='在看'">{{ scope.row.status }}</el-tag>
+            <el-tag type="success" v-else-if="(scope.row.status = '看完')">{{
+              scope.row.status
+            }}</el-tag>
+            <el-tag type="primary" v-else-if="(scope.row.status = '在看')">{{
+              scope.row.status
+            }}</el-tag>
             <!-- <el-tag type="success" v-if="scope.row.status == 0">{{ '可用' }}</el-tag> -->
             <!-- <el-tag type="danger" v-else>{{ '禁用' }}</el-tag> -->
           </template>
@@ -660,6 +677,11 @@ const locale = ref(zhCn)
 @media screen and (max-width: 768px) {
   .innerDialog {
     --el-dialog-width: 100% !important;
+  }
+}
+.animeView {
+  .el-input__wrapper {
+    flex-grow: inherit;
   }
 }
 </style>

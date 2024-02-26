@@ -19,8 +19,11 @@
 
   // background-color: rgb(212, 229, 243);
   // background: url(../assets/test/background.jpg);
+  // background-color: #fff;
+  background-image: url(../assets/background/bg.png);
+  background-size: 10% auto;
   // background: url(../assets/background.png);
-  background: url(../assets/background/background.png);
+  // background: url(../assets/background/background.png);
   // background: url(../assets/test/bg19e.png) no-repeat;
 }
 .el-main {
@@ -28,6 +31,5 @@
   // height: 100vh;
   width: 100%;
   overflow-x: hidden;
-  // margin-top: 57.6px;
 }
 </style>

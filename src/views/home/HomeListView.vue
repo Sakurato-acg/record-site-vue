@@ -1,10 +1,11 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { articleHomeListService } from '../../api/blog/article'
+import { articleFrontListService } from '../../api/blog/article'
 import { categoryHomeListService } from '../../api/blog/category'
 import { tagHomeListService } from '../../api/blog/tag'
 import { useRouter } from 'vue-router'
 import { useLayoutStore } from '../../stores/index'
+import { randomColor } from '../../utils/color'
 
 const router = useRouter()
 const layoutStore = useLayoutStore()
@@ -13,7 +14,7 @@ const layoutStore = useLayoutStore()
 const articleHomeList = ref({})
 //加载文章列表
 const getAtricleList = () => {
-  articleHomeListService(page.value)
+  articleFrontListService(page.value)
     .then((data) => {
       page.value.total = data.total
       layoutStore.setSummaryArticle(data.total)
@@ -27,7 +28,7 @@ const getAtricleList = () => {
 const categoryList = ref([])
 //加载分类列表
 const getCategoryList = () => {
-  categoryHomeListService()
+  categoryHomeListService(20)
     .then((data) => {
       categoryList.value = data.list
       layoutStore.setSummaryCategory(data.total)
@@ -39,7 +40,7 @@ const getCategoryList = () => {
 //标签列表
 const tagList = ref([])
 const getTagList = () => {
-  tagHomeListService()
+  tagHomeListService(20, null)
     .then((data) => {
       tagList.value = data.list
       layoutStore.setSummaryTag(data.total)
@@ -89,7 +90,7 @@ const friends = ref([
     </div>
   </div>
   <el-row class="main">
-    <el-col :span="16" class="list" :xs="22">
+    <el-col :span="17" class="list" :xs="22">
       <list-card :data="item" v-for="(item, index) in articleHomeList" :key="index"></list-card>
       <el-pagination
         @current-change="handleCurrentChange"
@@ -100,7 +101,7 @@ const friends = ref([
         style="float: right; margin-bottom: 20px"
       />
     </el-col>
-    <el-col :span="7" :offset="1" :xs="22" class="main-info">
+    <el-col :span="6" :offset="1" :xs="22" class="main-info">
       <el-card>
         <div>
           <summary-aside style="border-bottom: 2px #eaecef solid"></summary-aside>
@@ -111,17 +112,17 @@ const friends = ref([
               <el-icon><Menu /></el-icon>
               <span>Categories</span>
             </div>
-            <a class="right" href="">
+            <a class="right" href="/blog/collation">
               <span> more </span>
               <el-icon><DArrowRight /></el-icon>
             </a>
           </div>
           <div>
-            <div
+            <a
               v-for="(item, index) in categoryList"
               :key="index"
               class="categories-item"
-              @click="router.push('/category/' + item.id)"
+              :href="'/blog/collation?category=' + item.name"
             >
               <span class="name" style="">
                 {{ item.name }}
@@ -129,7 +130,7 @@ const friends = ref([
               <span class="count">
                 {{ item.count }}
               </span>
-            </div>
+            </a>
           </div>
         </div>
         <div class="tags">
@@ -143,20 +144,21 @@ const friends = ref([
               </svg>
               <span>Tags</span>
             </div>
-            <a class="right" href="">
+            <a class="right" href="/blog/collation">
               <span>more</span>
               <el-icon><DArrowRight /></el-icon>
             </a>
           </div>
           <div>
-            <div
+            <a
+              :style="{ 'background-color': randomColor() }"
               class="tags-item"
               v-for="(item, index) in tagList"
               :key="index"
-              @click="router.push('/tag/' + item.id)"
+              :href="'/blog/collation?tag=' + item.name"
             >
               {{ item.name }}
-            </div>
+            </a>
           </div>
         </div>
         <div class="friends">
@@ -177,6 +179,7 @@ const friends = ref([
           </div>
           <div>
             <div
+              :style="{ 'background-color': randomColor() }"
               class="friends-item"
               v-for="(item, index) in friends"
               :key="index"
@@ -231,7 +234,7 @@ const friends = ref([
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.1);
   content: '';
 }
 
@@ -248,7 +251,7 @@ const friends = ref([
     // border-bottom: 2px #eaecef solid;
   }
   .title {
-    margin: 20px 0;
+    margin: 30px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -290,9 +293,6 @@ const friends = ref([
         text-decoration: underline;
       }
     }
-    .categories-item:hover {
-      box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.2);
-    }
   }
   .tags,
   .friends {
@@ -304,13 +304,19 @@ const friends = ref([
       margin: 5px;
       padding: 5px 10px;
       box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.1);
-      cursor: pointer;
+      border-radius: 8px;
     }
   }
   .categories-item,
   .friends-item,
   .tags-item {
-    transition: all 0.4s;
+    transition: all 0.8s;
+  }
+
+  .categories-item:hover,
+  .friends-item:hover,
+  .tags-item:hover {
+    box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -330,25 +336,4 @@ const friends = ref([
   }
 }
 </style>
-<style>
-.el-pagination button {
-  font-size: 17px;
-  color: #999999 !important;
-  background-color: transparent;
-}
-.el-pager li {
-  font-size: 17px;
-  background-color: transparent;
-  /* margin: 0 4px; */
-}
-.el-pagination button:disabled {
-  font-size: 17px;
-  background-color: transparent;
-}
-.el-pager li.is-active {
-  color: #fff;
-  background-image: linear-gradient(to right, #ed6ea0 0, #ec8c69 100%);
-  border-radius: 5px;
-  box-shadow: 0 0 12px rgba(237, 110, 160, 0.3);
-}
-</style>
+<style></style>
