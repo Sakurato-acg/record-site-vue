@@ -19,10 +19,15 @@ export const userRouterService = () => {
   return request.get('/user/router')
 }
 
-//获取用户信息
+//获取头部信息
+export const userHeaderService = () => {
+  return request.get('/user/header')
+}
+
+//用户管理、用户信息编辑页面 获取用户信息
 export const userInfoService = (id) => {
   if (id == undefined) {
-    return request.get('/user/header')
+    return request.get('/user/admin')
   } else {
     return request.get('/user/admin?id=' + id)
   }

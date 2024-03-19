@@ -45,7 +45,6 @@ instance.interceptors.response.use(
     // 错误的特殊情况 => 501需要登录 503权限不足 或 token 过期 => 拦截到登录
     if (res.data.code === 501 || res.data.code === 503) {
       ElMessage.error(res.data.msg || '服务异常')
-
       const useStore = useUserStore()
       useStore.removeToken()
       router.push('/login')

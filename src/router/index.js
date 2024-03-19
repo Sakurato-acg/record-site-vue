@@ -102,6 +102,7 @@ router.beforeEach((to, from, next) => {
           //获取动态路由
 
           getRoute(data)
+          console.log(data)
           children.forEach((item) => {
             router.addRoute('admin', item)
           })

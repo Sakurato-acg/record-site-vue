@@ -3,6 +3,8 @@ import { onMounted, ref } from 'vue'
 import { userListService, userDeleteService, userUpdateService } from '../../api/system/user'
 import { userInfoService } from '../../api/auth/user'
 import { roleSelectService } from '../../api/system/role'
+import { useUserStore } from '../../stores/index'
+const userStore = useUserStore()
 
 //中文
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
@@ -190,6 +192,11 @@ const update = () => {
   //api
   userUpdateService(updateForm.value.form)
     .then((data) => {
+      userStore.setUserInfo({
+        id: updateForm.value.form.id,
+        avatar: updateForm.value.form.avatar,
+        nickName: updateForm.value.form.nickName
+      })
       changeUpdateFormVisable()
       getUserList()
     })

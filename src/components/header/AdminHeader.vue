@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useLayoutStore, useUserStore } from '../../stores/index'
 import { useRouter } from 'vue-router'
-import { userLogoutService, userInfoService } from '../../api/auth/user'
+import { userLogoutService, userHeaderService } from '../../api/auth/user'
 
 const userStore = useUserStore()
 
@@ -37,11 +37,8 @@ const title = computed(() => {
 })
 
 //userInfo
-const userInfo = ref({
-  id: undefined,
-  avatar: undefined,
-  userName: undefined,
-  nickName: undefined
+const userInfo = computed(()=>{
+  return userStore.userInfo
 })
 
 //date
@@ -68,10 +65,10 @@ onMounted(() => {
   // if (userStore.checkUserInfo()) {
   //   userInfo.value = userStore.userInfo
   // } else {
-  userInfoService()
+  userHeaderService()
     .then((data) => {
-      userInfo.value = data
-      // userStore.setUserInfo(data)
+      // userInfo.value = data
+      userStore.setUserInfo(data)
     })
     .catch((error) => {})
   // }

@@ -3,9 +3,11 @@ import { onMounted, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { userInfoService, userUpdateService } from '../../api/auth/user'
 import { uploadImageService } from '../../api/system/upload'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
+import { useUserStore } from '../../stores/index'
 
-const router=useRouter()
+const userStore = useUserStore()
+const router = useRouter()
 
 //校验
 const ruleForm = ref()
@@ -61,13 +63,7 @@ const registerRules = ref({
   url: [{ required: false, message: '请输入个人链接', trigger: 'blur' }]
 })
 //获取用户信息
-const form = ref({
-  userName: undefined,
-  password: undefined,
-  email: undefined,
-  avatar: undefined,
-  url: undefined
-})
+const form = ref({})
 
 onMounted(() => {
   userInfoService()
@@ -86,6 +82,11 @@ let goback = () =>
 const onSubmit = () => {
   userUpdateService(form.value)
     .then((data) => {
+      userStore.setUserInfo({
+        avatar: form.value.avatar,
+        id: form.value.id,
+        nickName: form.value.nickName
+      })
       // goback()
       // clearTimeout(goback)
     })
