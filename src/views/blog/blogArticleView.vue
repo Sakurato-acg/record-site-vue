@@ -368,7 +368,7 @@ hr {
   h3::before,
   h4::before {
     left: -30px;
-    top: 10%;
+    // top: 10%;
     position: absolute;
     color: #b0b0b0;
     font-size: medium;

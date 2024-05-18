@@ -9,7 +9,7 @@ const router = createRouter({
       id: 1,
       path: '/login',
       name: 'login',
-      component: () => import('../views/login/LoginView.vue')
+      component: () => import('../views/user/LoginView.vue')
     },
     {
       path: '/',
@@ -59,6 +59,7 @@ router.beforeEach((to, from, next) => {
   if (isLogin == false && to.name != 'login') {
     //无token,访问的地址不是login
     if (to.fullPath.includes('/admin')) {
+      ElMessage.error('请先登录')
       next('/login')
     } else {
       next()
@@ -83,7 +84,7 @@ router.beforeEach((to, from, next) => {
           store.setAsideMenu(data)
           let children = []
 
-          const getRoute = function (arr) {
+          const getRoute = (arr) => {
             arr.forEach((item) => {
               item.meta = {
                 title: item.meta

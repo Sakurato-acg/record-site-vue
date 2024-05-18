@@ -5,7 +5,7 @@ import { ElMessage } from 'element-plus'
 import router from '../router/index.js'
 
 // const baseURL = `${'http://2858534773.gnway.cc:8000'}`
-const baseURL = 'http://localhost:82'
+const baseURL = 'http://localhost:81'
 
 const instance = axios.create({
   baseURL,

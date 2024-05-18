@@ -61,7 +61,7 @@ const searchform = ref({
   title: undefined,
   author: undefined,
   categoryId: undefined,
-  tagIds: [],
+  tagIds: undefined,
   isTop: undefined,
   status: undefined
 })
@@ -73,7 +73,6 @@ const clearSearch = () => {
     title: undefined,
     author: undefined,
     categoryId: undefined,
-    tags: [],
     isTop: undefined,
     status: undefined
   }
@@ -86,6 +85,7 @@ const selectList = ref({
 })
 
 const getArticleList = () => {
+  console.log(searchform.value)
   articleAdminListService(searchform.value)
     .then((data) => {
       tableData.value = data.list

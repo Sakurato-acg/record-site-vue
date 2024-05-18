@@ -192,11 +192,11 @@ const update = () => {
   //api
   userUpdateService(updateForm.value.form)
     .then((data) => {
-      userStore.setUserInfo({
-        id: updateForm.value.form.id,
-        avatar: updateForm.value.form.avatar,
-        nickName: updateForm.value.form.nickName
-      })
+      // userStore.setUserInfo({
+      //   id: updateForm.value.form.id,
+      //   avatar: updateForm.value.form.avatar,
+      //   nickName: updateForm.value.form.nickName
+      // })
       changeUpdateFormVisable()
       getUserList()
     })

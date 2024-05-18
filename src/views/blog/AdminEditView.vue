@@ -316,7 +316,7 @@ const deleteArticle = () => {
         theme="light"
         :show-code-row-number="true"
         previewTheme="default"
-        code-theme="paraiso"
+        code-theme="atom"
         :showToolbarName="true"
         @onUploadImg="onUploadImg"
       />

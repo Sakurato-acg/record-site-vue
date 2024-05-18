@@ -2,7 +2,7 @@ import request from '../../utils/request'
 
 //获取番剧列表
 export const animeListService = (form) => {
-  return request.post('/anime/admin/list', form)
+ return request.post('/anime/admin/list', form)
 }
 export const animeGetByIdService = (id) => {
   return request.get(`/anime/${id}`)

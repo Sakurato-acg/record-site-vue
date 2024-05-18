@@ -9,25 +9,40 @@ import {
 } from '../../api/acg/anime.js'
 import { subjectInfoService } from '../../api/bangumi/bangumi'
 import { ElMessage, ElMessageBox } from 'element-plus'
-
-//展示表格
-const tableData = ref([])
-//获取展示表格数据
-const getAnimeList = () => {
-  animeListService(searchform.value)
-    .then((data) => {
-      tableData.value = data.list
-      searchform.value.total = data.total
-    })
-    .catch((err) => {
-      console.log(err)
-      clearTableData()
-    })
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+const locale = ref(zhCn)
+//布局
+const tableRowClassName = ({ row, rowIndex }) => {
+  if (rowIndex === 1) {
+    return 'warning-row'
+  } else if (rowIndex === 3) {
+    return 'success-row'
+  }
+  return ''
 }
-const clearTableData = () => {
-  tableData.value = []
+const indexMethod = (index) => {
+  return (index += (searchform.value.currentPage - 1) * searchform.value.pageSize + 1)
 }
-onMounted(getAnimeList)
+const handleSizeChange = (val) => {
+  console.log(`每页 ${val} 条`)
+  searchform.value.pageSize = val
+  getAnimeList()
+  backTop()
+}
+const handleCurrentChange = (val) => {
+  // console.log(`当前页: ${val}`)
+  searchform.value.currentPage = val
+  getAnimeList()
+  backTop()
+}
+const backTop = () => {
+  let node = document.querySelector('.el-main')
+  node.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  })
+}
 
 //弹窗 + 添加数据
 const addForm = ref({
@@ -48,6 +63,7 @@ const changeAddFormVisable = () => {
   addForm.value.dialogFormVisible = !addForm.value.dialogFormVisible
 }
 const getBangumi = (form) => {
+  if (form.form.url == undefined) ElMessage.error('网址不能为空')
   let url
   if (form.form.url.includes('https://bgm.tv/subject/')) {
     url = form.form.url.substring('https://bgm.tv/subject/'.length)
@@ -215,10 +231,6 @@ const handleSelectionChange = (val) => {
   multipleSelection.value = val
 }
 
-/**
- *
- *
- */
 //查询番剧数据
 const searchform = ref({
   currentPage: 1,
@@ -238,6 +250,24 @@ const getYear = () => {
   }
   return year
 }
+//展示表格
+const tableData = ref([])
+//获取展示表格数据
+const getAnimeList = () => {
+  animeListService(searchform.value)
+    .then((data) => {
+      console.log(data)
+      tableData.value = data.list
+      searchform.value.total = data.total
+    })
+    .catch((err) => {
+      console.log(err)
+      clearTableData()
+    })
+}
+const clearTableData = () => {
+  tableData.value = []
+}
 const onSubmit = () => {
   getAnimeList()
 }
@@ -254,44 +284,12 @@ const clearSearch = () => {
   }
   getAnimeList()
 }
-
-//布局
-const tableRowClassName = ({ row, rowIndex }) => {
-  if (rowIndex === 1) {
-    return 'warning-row'
-  } else if (rowIndex === 3) {
-    return 'success-row'
-  }
-  return ''
-}
-const indexMethod = (index) => {
-  return (index += (searchform.value.currentPage - 1) * searchform.value.pageSize + 1)
-}
-const handleSizeChange = (val) => {
-  console.log(`每页 ${val} 条`)
-  searchform.value.pageSize = val
+onMounted(() => {
   getAnimeList()
-  backTop()
-}
-const handleCurrentChange = (val) => {
-  // console.log(`当前页: ${val}`)
-  searchform.value.currentPage = val
-  getAnimeList()
-  backTop()
-}
-const backTop = () => {
-  let node = document.querySelector('.el-main')
-  node.scrollTo({
-    top: 0,
-    left: 0,
-    behavior: 'smooth'
-  })
-}
-import zhCn from 'element-plus/es/locale/lang/zh-cn'
-const locale = ref(zhCn)
+})
 </script>
 <template>
-  <div class="animeView">
+  <div id="animeView">
     <div class="tableHeader">
       <el-row>
         <el-form
@@ -405,11 +403,10 @@ const locale = ref(zhCn)
         <el-table-column prop="type" label="类型" align="center"> </el-table-column>
         <el-table-column prop="status" label="状态" align="center">
           <template #default="scope">
-            <el-tag type="danger" v-if="scope.row.status == '待看'">{{ scope.row.status }}</el-tag>
-            <el-tag type="success" v-else-if="(scope.row.status = '看完')">{{
-              scope.row.status
-            }}</el-tag>
-            <el-tag type="primary" v-else-if="(scope.row.status = '在看')">{{
+            <!-- <h1>{{ scope.row }}</h1> -->
+            <el-tag v-if="scope.row.status == '待看'" type="danger">{{ scope.row.status }}</el-tag>
+            <el-tag v-else-if="scope.row.status == '在看'">{{ scope.row.status }}</el-tag>
+            <el-tag v-else-if="scope.row.status == '看完'" type="success">{{
               scope.row.status
             }}</el-tag>
             <!-- <el-tag type="success" v-if="scope.row.status == 0">{{ '可用' }}</el-tag> -->
@@ -679,7 +676,7 @@ const locale = ref(zhCn)
     --el-dialog-width: 100% !important;
   }
 }
-.animeView {
+#animeView {
   .el-input__wrapper {
     flex-grow: inherit;
   }
